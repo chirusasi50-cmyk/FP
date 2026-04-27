@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual AQI Checker</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right,#dff6ff,#ffffff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    width:90%;
+    max-width:500px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+h1{
+    color:#0077b6;
+}
+
+input{
+    width:80%;
+    padding:10px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+button{
+    padding:10px 18px;
+    background:#0077b6;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#023e8a;
+    transform:scale(1.05);
+}
+
+.result{
+    margin-top:20px;
+    text-align:left;
+    line-height:1.8;
+}
+
+.good{color:green; font-weight:bold;}
+.moderate{color:orange; font-weight:bold;}
+.poor{color:red; font-weight:bold;}
+.verypoor{color:darkred; font-weight:bold;}
+
+/* AQI Circle */
+.circle{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin:20px auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:bold;
+    color:white;
+    animation:pop 1s ease;
+}
+
+.green{background:green;}
+.orange{background:orange;}
+.red{background:red;}
+.darkred{background:darkred;}
+
+/* Animation */
+@keyframes pop{
+    0%{transform:scale(0);}
+    100%{transform:scale(1);}
+}
+
+@keyframes blink{
+    0%,100%{opacity:1;}
+    50%{opacity:0.5;}
+}
+
+.blink{
+    animation:blink 1s infinite;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Manual AQI Checker</h1>
+    <p>Enter city name</p>
+
+    <input type="text" id="city" placeholder="Enter city name">
+    <br>
+    <button onclick="checkAQI()">Check AQI</button>
+
+    <div class="result" id="output"></div>
+</div>
+
+<script>
+
+function checkAQI(){
+
+    let city = document.getElementById("city").value.toLowerCase().trim();
+    let output = document.getElementById("output");
+
+    if(city==""){
+        output.innerHTML = "Please enter city name.";
+        return;
+    }
+
+    let data = {
+        "delhi":   {aqi:320, status:"Very Poor", class:"verypoor", color:"darkred", tip:"Stay indoors and wear mask."},
+        "mumbai":  {aqi:180, status:"Moderate", class:"moderate", color:"orange", tip:"Limit outdoor activities."},
+        "hyderabad":{aqi:95, status:"Good", class:"good", color:"green", tip:"Air quality is good. Enjoy outside."},
+        "guntur":  {aqi:110, status:"Moderate", class:"moderate", color:"orange", tip:"Sensitive people take care."},
+        "chennai": {aqi:150, status:"Moderate", class:"moderate", color:"orange", tip:"Reduce outdoor exercise."},
+        "bangalore":{aqi:80, status:"Good", class:"good", color:"green", tip:"Fresh air. Good for outdoor walk."},
+        "kolkata": {aqi:220, status:"Poor", class:"poor", color:"red", tip:"Wear mask outside."},
+        "pune":    {aqi:100, status:"Moderate", class:"moderate", color:"orange", tip:"Acceptable air quality."}
+    };
+
+    let info;
+
+    if(data[city]){
+        info = data[city];
+    }else{
+        info = {aqi:120, status:"Moderate", class:"moderate", color:"orange", tip:"Maintain clean environment and plant trees."};
+    }
+
+    output.innerHTML = `
+        <div class="circle ${info.color} blink">${info.aqi}</div>
+        <p><b>City:</b> ${city.toUpperCase()}</p>
+        <p><b>Status:</b> <span class="${info.class}">${info.status}</span></p>
+        <p><b>Suggestion:</b> ${info.tip}</p>
+    `;
+}
+
+</script>
+
+</body>
+</html>
